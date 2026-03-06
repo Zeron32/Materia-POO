@@ -1,0 +1,29 @@
+SISTEMA DE COMPRA DE CAMISAS
+
+Ideias e Funcionalidades Principais:
+
+1. Catálogo de Produtos
+Categorias (masculina, feminina, infantil)
+Filtros (tamanho, cor, preço, marca)
+Galeria de imagens
+Descrição detalhada
+Avaliações de clientes
+2. Personalização
+Escolher cor da camisa
+Adicionar texto personalizado
+Upload de estampas/logos
+3. Carrinho de Compras
+Adicionar/remover itens
+Cupons de desconto
+4. Checkout
+Cálculo de frete por CEP
+Múltiplas formas de pagamento (cartão, boleto, pix)
+Endereço de entrega
+Resumo do pedido
+5. Gestão de Pedidos
+Histórico de compras
+
+
+Utilizarei o catálogo de produtos como uma forma de vitrine onde o usuário poderá olhar e ter uma ideia como serás as camisas, tentarei colocar uma parte de personalização onde o cliente poderá escolher a estampa da camisa.
+Carrinho de compras onde o usuário poderá adicionar mais ou remover o produto. Check-out deverá ter cálculo de cep e formas de pagamento.
+Gestão de pagamentos conseguir ver todo o histórico do que ja foi comprado.
