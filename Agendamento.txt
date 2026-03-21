@@ -1,6 +1,6 @@
 SISTEMA DE COMPRA DE CAMISAS
 
-Ideias e Funcionalidades Principais:
+Ideias e Funcionalidades Principais:a
 
 1. Catálogo de Produtos
 Categorias (masculina, feminina, infantil)
