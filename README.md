@@ -115,6 +115,102 @@ Sistema de recomendação de produtos
 Integração com redes sociais
 Programa de fidelidade para clientes
 
+camisas-ecommerce/
+│
+├── frontend/
+├── backend/
+├── docs/
+├── database/
+├── .gitignore
+├── README.md
+
+frontend/
+│
+├── public/
+│   └── index.html
+│
+├── src/
+│   ├── assets/            imagens, ícones, fontes
+│   ├── components/        componentes reutilizáveis
+│   │   ├── Button/
+│   │   ├── CardProduto/
+│   │   ├── Navbar/
+│   │   └── Footer/
+│   │
+│   ├── pages/             páginas principais
+│   │   ├── Home/
+│   │   ├── Catalogo/
+│   │   ├── Produto/
+│   │   ├── Carrinho/
+│   │   ├── Checkout/
+│   │   └── Perfil/
+│   │
+│   ├── services/          comunicação com API
+│   │   ├── api.js
+│   │   ├── produtosService.js
+│   │   └── pedidosService.js
+│   │
+│   ├── hooks/             hooks customizados
+│   ├── context/           estado global (carrinho, usuário)
+│   ├── utils/             funções auxiliares
+│   ├── styles/            CSS global / temas
+│   ├── routes/            configuração de rotas
+│   ├── App.js
+│   └── main.js
+│
+├── package.json
+└── vite.config.js
+
+backend/
+│
+├── src/
+│   ├── config/           # configs (db, env)
+│   │   └── database.js
+│   │
+│   ├── controllers/      # lógica das rotas
+│   │   ├── produtoController.js
+│   │   ├── pedidoController.js
+│   │   └── usuarioController.js
+│   │
+│   ├── models/           # modelos do banco
+│   │   ├── Produto.js
+│   │   ├── Pedido.js
+│   │   └── Usuario.js
+│   │
+│   ├── routes/           # definição das rotas
+│   │   ├── produtoRoutes.js
+│   │   ├── pedidoRoutes.js
+│   │   └── usuarioRoutes.js
+│   │
+│   ├── services/         # regras de negócio
+│   │   ├── pagamentoService.js
+│   │   ├── freteService.js
+│   │   └── personalizacaoService.js
+│   │
+│   ├── middlewares/      # autenticação, validações
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   │
+│   ├── utils/            # funções auxiliares
+│   ├── app.js
+│   └── server.js
+│
+├── package.json
+└── .env
+
+database/
+│
+├── migrations/           # criação de tabelas
+├── seeds/                # dados iniciais
+└── schema.sql
+
+docs/
+│
+├── requisitos.md
+├── arquitetura.md
+├── api.md
+└── wireframes/
+
 Autor
 Kleber José da Silva
 RA: 202510220
