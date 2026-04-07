@@ -49,12 +49,10 @@ const products = [
     }
 ];
 
-// Estado da aplicação
 let schedules = [];
 let selectedProductId = null;
 let cart = [];
 
-// Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     loadSchedules();
     loadCart();
@@ -67,32 +65,25 @@ document.addEventListener('DOMContentLoaded', function() {
     setMinDate();
 });
 
-// Configurar data mínima (hoje)
 function setMinDate() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('scheduledDate').min = today;
 }
 
-// Configurar event listeners
 function setupEventListeners() {
-    // Navegação entre abas
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             switchTab(this.dataset.tab);
         });
     });
 
-    // Formulário de agendamento
     document.getElementById('scheduleForm').addEventListener('submit', handleSubmit);
     
-    // Mudanças no formulário
     document.getElementById('productId').addEventListener('change', handleProductChange);
     document.getElementById('quantity').addEventListener('input', updateTotal);
 }
 
-// Trocar aba
 function switchTab(tabName) {
-    // Atualizar abas ativas
     document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.classList.remove('active');
         if (tab.dataset.tab === tabName) {
@@ -100,14 +91,12 @@ function switchTab(tabName) {
         }
     });
 
-    // Atualizar seções ativas
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
     });
     document.getElementById(tabName).classList.add('active');
 }
 
-// Renderizar produtos
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '';
@@ -143,7 +132,6 @@ function renderProducts() {
         grid.appendChild(card);
     });
 
-    // Popular select do formulário
     const productSelect = document.getElementById('productId');
     productSelect.innerHTML = '<option value="">Selecione um produto</option>';
     products.forEach(product => {
@@ -154,7 +142,6 @@ function renderProducts() {
     });
 }
 
-// Selecionar produto
 function selectProduct(productId) {
     selectedProductId = productId;
     document.getElementById('productId').value = productId;
@@ -162,7 +149,6 @@ function selectProduct(productId) {
     switchTab('schedule');
 }
 
-// Quando o produto muda no formulário
 function handleProductChange() {
     const productId = parseInt(document.getElementById('productId').value);
     const product = products.find(p => p.id === productId);
@@ -172,7 +158,6 @@ function handleProductChange() {
     const preview = document.getElementById('productPreview');
 
     if (product) {
-        // Atualizar preview
         preview.innerHTML = `
             <div class="product-preview">
                 <img src="${product.image}" alt="${product.name}" class="preview-image">
@@ -183,7 +168,6 @@ function handleProductChange() {
             </div>
         `;
 
-        // Atualizar tamanhos
         sizeSelect.innerHTML = '<option value="">Selecione</option>';
         product.sizes.forEach(size => {
             const option = document.createElement('option');
@@ -193,7 +177,6 @@ function handleProductChange() {
         });
         sizeSelect.disabled = false;
 
-        // Atualizar cores
         colorSelect.innerHTML = '<option value="">Selecione</option>';
         product.colors.forEach(color => {
             const option = document.createElement('option');
@@ -214,7 +197,6 @@ function handleProductChange() {
     }
 }
 
-// Atualizar total
 function updateTotal() {
     const productId = parseInt(document.getElementById('productId').value);
     const quantity = parseInt(document.getElementById('quantity').value) || 0;
@@ -232,7 +214,6 @@ function updateTotal() {
     }
 }
 
-// Validar formulário
 function validateForm() {
     const errors = {};
     
@@ -257,13 +238,11 @@ function validateForm() {
     if (!customerPhone) errors.customerPhone = 'Telefone é obrigatório';
     if (!scheduledDate) errors.scheduledDate = 'Data é obrigatória';
 
-    // Limpar erros anteriores
     document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
     document.querySelectorAll('.form-input, .form-select').forEach(el => {
         el.classList.remove('error');
     });
 
-    // Mostrar novos erros
     Object.keys(errors).forEach(field => {
         const errorEl = document.getElementById(field + 'Error');
         const inputEl = document.getElementById(field);
@@ -274,7 +253,6 @@ function validateForm() {
     return Object.keys(errors).length === 0;
 }
 
-// Enviar formulário
 function handleSubmit(e) {
     e.preventDefault();
     
@@ -302,20 +280,17 @@ function handleSubmit(e) {
     renderScheduleList();
     updateScheduleCount();
     
-    // Limpar formulário
     document.getElementById('scheduleForm').reset();
     document.getElementById('productPreview').innerHTML = '';
     document.getElementById('totalBox').style.display = 'none';
     document.getElementById('size').disabled = true;
     document.getElementById('color').disabled = true;
     
-    // Ir para lista
     switchTab('list');
     
-    alert('✅ Agendamento realizado com sucesso!');
+    alert('Agendamento realizado com sucesso!');
 }
 
-// Cancelar agendamento
 function cancelSchedule() {
     if (confirm('Deseja cancelar este agendamento?')) {
         document.getElementById('scheduleForm').reset();
@@ -325,9 +300,6 @@ function cancelSchedule() {
     }
 }
 
-//=== FUNÇÕES DO CARRINHO ===//
-
-// Renderizar carrinho
 function renderCart() {
     const cartContent = document.getElementById('cartContent');
     const description = document.getElementById('cartDescription');
@@ -381,19 +353,17 @@ function renderCart() {
                 <span class="cart-total-value">R$ ${total.toFixed(2)}</span>
             </div>
             <div class="cart-actions">
-                <button class="btn btn-primary" onclick="checkoutCart()">✅ Finalizar Pedido</button>
-                <button class="btn btn-secondary" onclick="clearCart()">🗑️ Limpar Carrinho</button>
+                <button class="btn btn-primary" onclick="checkoutCart()"> Finalizar Pedido</button>
+                <button class="btn btn-secondary" onclick="clearCart()"> Limpar Carrinho</button>
             </div>
         </div>
     `;
 }
 
-// Adicionar ao carrinho
 function addToCart(productId, size, color, quantity) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
-    // Verificar se o item já existe no carrinho
     const existingIndex = cart.findIndex(item => 
         item.product.id === productId && 
         item.size === size && 
@@ -401,10 +371,8 @@ function addToCart(productId, size, color, quantity) {
     );
 
     if (existingIndex >= 0) {
-        // Atualizar quantidade
         cart[existingIndex].quantity += quantity;
     } else {
-        // Adicionar novo item
         cart.push({
             product: product,
             size: size,
@@ -416,10 +384,9 @@ function addToCart(productId, size, color, quantity) {
     saveCart();
     renderCart();
     updateCartCount();
-    alert('✅ Produto adicionado ao carrinho!');
+    alert('Produto adicionado ao carrinho!');
 }
 
-// Atualizar quantidade no carrinho
 function updateCartQuantity(index, newQuantity) {
     if (newQuantity < 1) {
         removeFromCart(index);
@@ -432,7 +399,6 @@ function updateCartQuantity(index, newQuantity) {
     updateCartCount();
 }
 
-// Remover do carrinho
 function removeFromCart(index) {
     if (confirm('Deseja remover este item do carrinho?')) {
         cart.splice(index, 1);
@@ -442,7 +408,6 @@ function removeFromCart(index) {
     }
 }
 
-// Limpar carrinho
 function clearCart() {
     if (confirm('Deseja limpar todo o carrinho?')) {
         cart = [];
@@ -452,7 +417,6 @@ function clearCart() {
     }
 }
 
-// Finalizar pedido
 function checkoutCart() {
     if (cart.length === 0) {
         alert('❌ Seu carrinho está vazio!');
@@ -474,7 +438,6 @@ function checkoutCart() {
     const scheduledDate = prompt('Digite a data de retirada (dd/mm/aaaa):');
     if (!scheduledDate) return;
 
-    // Converter cada item do carrinho em um agendamento
     cart.forEach(item => {
         const schedule = {
             id: Date.now().toString() + Math.random(),
@@ -497,28 +460,24 @@ function checkoutCart() {
     renderScheduleList();
     updateScheduleCount();
 
-    // Limpar carrinho
     cart = [];
     saveCart();
     renderCart();
     updateCartCount();
 
-    alert('✅ Pedido finalizado com sucesso!');
+    alert('Pedido finalizado com sucesso!');
     switchTab('list');
 }
 
-// Atualizar contador do carrinho
 function updateCartCount() {
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cartBadge').textContent = count;
 }
 
-// Salvar carrinho
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Carregar carrinho
 function loadCart() {
     const saved = localStorage.getItem('cart');
     if (saved) {
@@ -530,9 +489,6 @@ function loadCart() {
     }
 }
 
-//=== FUNÇÕES DE AGENDAMENTOS ===//
-
-// Renderizar lista de agendamentos
 function renderScheduleList() {
     const list = document.getElementById('scheduleList');
     const description = document.getElementById('listDescription');
@@ -551,7 +507,6 @@ function renderScheduleList() {
 
     description.textContent = `Você tem ${schedules.length} ${schedules.length === 1 ? 'agendamento' : 'agendamentos'}`;
     
-    // Ordenar por data de criação (mais recentes primeiro)
     const sorted = [...schedules].sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -587,8 +542,8 @@ function renderScheduleList() {
                                 <div class="info-box-title">👤 Cliente</div>
                                 <div class="info-box-content">
                                     <strong>${schedule.customerName}</strong><br>
-                                    📧 ${schedule.customerEmail}<br>
-                                    📞 ${schedule.customerPhone}
+                                     ${schedule.customerEmail}<br>
+                                     ${schedule.customerPhone}
                                 </div>
                             </div>
 
@@ -614,7 +569,6 @@ function renderScheduleList() {
     }).join('');
 }
 
-// Deletar agendamento
 function deleteSchedule(id) {
     if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
         schedules = schedules.filter(s => s.id !== id);
@@ -624,23 +578,18 @@ function deleteSchedule(id) {
     }
 }
 
-// Atualizar contador
 function updateScheduleCount() {
     const count = schedules.length;
     document.getElementById('scheduleCount').textContent = 
         `${count} ${count === 1 ? 'Agendamento' : 'Agendamentos'}`;
 }
 
-// Formatar data
 function formatDate(dateString) {
-    // Tentar diferentes formatos de data
     let date;
     if (dateString.includes('/')) {
-        // Formato dd/mm/aaaa
         const parts = dateString.split('/');
         date = new Date(parts[2], parts[1] - 1, parts[0]);
     } else if (dateString.includes('-')) {
-        // Formato yyyy-mm-dd
         date = new Date(dateString + 'T00:00:00');
     } else {
         date = new Date(dateString);
@@ -653,7 +602,6 @@ function formatDate(dateString) {
     });
 }
 
-// Formatar data e hora
 function formatDateTime(dateString) {
     const date = new Date(dateString);
     return date.toLocaleString('pt-BR', {
@@ -665,12 +613,11 @@ function formatDateTime(dateString) {
     });
 }
 
-// Salvar no localStorage
+
 function saveSchedules() {
     localStorage.setItem('schedules', JSON.stringify(schedules));
 }
 
-// Carregar do localStorage
 function loadSchedules() {
     const saved = localStorage.getItem('schedules');
     if (saved) {
@@ -681,3 +628,88 @@ function loadSchedules() {
         }
     }
 }
+// Seleciona elementos do DOM
+const form = document.getElementById('scheduleForm');
+const scheduleList = document.getElementById('scheduleList');
+const scheduleCount = document.getElementById('scheduleCount');
+
+// Função para carregar agendamentos do servidor
+async function carregarAgendamentos() {
+  try {
+    const response = await fetch('api/list_schedules.php');
+    const data = await response.json();
+
+    scheduleList.innerHTML = '';
+
+    if (!data.schedules || data.schedules.length === 0) {
+      scheduleList.innerHTML = '<p>Nenhum agendamento.</p>';
+      scheduleCount.textContent = '0 Agendamentos';
+      return;
+    }
+
+    data.schedules.forEach(item => {
+      const div = document.createElement('div');
+      div.classList.add('schedule-item');
+      div.innerHTML = `
+        <strong>Produto:</strong> ${item.produto || '-'} <br>
+        <strong>Quantidade:</strong> ${item.quantidade || '-'} <br>
+        <strong>Nome:</strong> ${item.customerName || '-'} <br>
+        <strong>Email:</strong> ${item.customerEmail || '-'} <br>
+        <strong>Telefone:</strong> ${item.customerPhone || '-'} <br>
+        <strong>Data:</strong> ${item.scheduledDate || '-'} <br>
+        <strong>Observações:</strong> ${item.notes || '-'}
+      `;
+      scheduleList.appendChild(div);
+    });
+
+    scheduleCount.textContent = `${data.schedules.length} Agendamento(s)`;
+  } catch (err) {
+    console.error('Erro ao carregar agendamentos:', err);
+    scheduleList.innerHTML = '<p>Erro ao carregar agendamentos.</p>';
+  }
+}
+
+// Evento de submit do formulário
+form.addEventListener('submit', async (e) => {
+  e.preventDefault(); // evita recarregar a página
+
+  const scheduleData = {
+    produto: document.getElementById('productId').value,
+    tamanho: document.getElementById('size').value,
+    cor: document.getElementById('color').value,
+    quantidade: document.getElementById('quantity').value,
+    customerName: document.getElementById('customerName').value,
+    customerEmail: document.getElementById('customerEmail').value,
+    customerPhone: document.getElementById('customerPhone').value,
+    scheduledDate: document.getElementById('scheduledDate').value,
+    notes: document.getElementById('notes').value
+  };
+
+  // Validação básica
+  for (let key in scheduleData) {
+    if (!scheduleData[key] && key !== 'notes') {
+      alert('Preencha todos os campos obrigatórios!');
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch('api/create_schedule.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(scheduleData)
+    });
+
+    const result = await response.json();
+    alert(result.message);
+
+    form.reset();
+    carregarAgendamentos(); // atualiza lista
+  } catch (err) {
+    console.error('Erro ao salvar agendamento:', err);
+    alert('Erro ao salvar agendamento.');
+  }
+});
+
+// Carrega a lista ao abrir a página
+window.addEventListener('DOMContentLoaded', carregarAgendamentos);

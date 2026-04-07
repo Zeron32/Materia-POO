@@ -1,0 +1,17 @@
+[
+    {
+        "titulo": "Teste",
+        "data": "2026-04-10"
+    },
+    {
+        "produto": "2",
+        "tamanho": "G",
+        "cor": "Carv\u00e3o",
+        "quantidade": "1",
+        "customerName": "Fabio",
+        "customerEmail": "fab@gmail.com",
+        "customerPhone": "1154968798",
+        "scheduledDate": "2026-04-15",
+        "notes": "Sad"
+    }
+]
