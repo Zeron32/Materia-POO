@@ -1,19 +1,12 @@
 <?php
 header("Content-Type: application/json");
+require_once __DIR__ . "/Schedule.php";
 
-$file = __DIR__ . "/schedules.json";
-
-if (!file_exists($file)) {
-    echo json_encode(["success" => true, "schedules" => []]);
-    exit;
-}
-
-$data = json_decode(file_get_contents($file), true);
-if (!is_array($data)) {
-    $data = [];
-}
+$schedule = new Schedule();
+$schedules = $schedule->getAll();
 
 echo json_encode([
     "success" => true,
-    "schedules" => $data
+    "schedules" => $schedules
 ]);
+?>
