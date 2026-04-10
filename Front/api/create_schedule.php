@@ -1,31 +1,19 @@
 <?php
 header("Content-Type: application/json");
+require_once __DIR__ . "/Schedule.php";
 
-$file = __DIR__ . "/schedules.json";
-
+$schedule = new Schedule();
 $data = json_decode(file_get_contents("php://input"), true);
 
-$requiredFields = ['produto', 'tamanho', 'cor', 'quantidade', 'customerName', 'customerEmail', 'customerPhone', 'scheduledDate'];
-foreach ($requiredFields as $field) {
-    if (empty($data[$field])) {
-        echo json_encode(["success" => false, "message" => "O campo '$field' é obrigatório."]);
-        exit;
-    }
+$error = $schedule->validate($data);
+if ($error) {
+    echo json_encode(["success" => false, "message" => $error]);
+    exit;
 }
 
-if (!file_exists($file)) {
-    file_put_contents($file, json_encode([]));
-}
-
-$current = json_decode(file_get_contents($file), true);
-if (!is_array($current)) {
-    $current = [];
-}
-
-$current[] = $data;
-
-if (file_put_contents($file, json_encode($current, JSON_PRETTY_PRINT))) {
+if ($schedule->save($data)) {
     echo json_encode(["success" => true, "message" => "Agendamento salvo com sucesso!"]);
 } else {
-    echo json_encode(["success" => false, "message" => "Erro ao salvar o agendamento."]);
+    echo json_encode(["success" => false, "message" => "Erro ao salvar."]);
 }
+?>
