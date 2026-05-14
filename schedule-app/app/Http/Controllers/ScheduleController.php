@@ -4,48 +4,75 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Schedule;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
-    // GET /schedules → lista todos os agendamentos
+    public function __construct()
+    {
+$this->middleware('auth')->except('index');
+    }
+    
     public function index()
     {
-        // retorna todos os registros em JSON
-        $schedules = Schedule::all();
-        return response()->json($schedules);
+        $schedules = Auth::user()->schedules;
+        return view('schedules.index', compact('schedules'));
     }
-
-    public function destroy($id)
-{
-    $schedule = Schedule::findOrFail($id);
-    $schedule->delete();
-    return response()->json(['success' => true]);
-}
-
-    // POST /schedules → cria um novo agendamento
+    
+    public function create()
+    {
+        return view('schedules.create');
+    }
+    
     public function store(Request $request)
     {
-        // valida os dados recebidos
         $validated = $request->validate([
-            'produto' => 'required|string|max:255',
-            'tamanho' => 'required|string|max:50',
-            'cor' => 'required|string|max:50',
-            'quantidade' => 'required|integer|min:1',
-            'customerName' => 'required|string|max:255',
-            'customerEmail' => 'required|email',
-            'customerPhone' => 'required|string|max:20',
-            'scheduledDate' => 'required|date',
-            'notes' => 'nullable|string'
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'time' => 'required',
+            'description' => 'nullable|string'
         ]);
-
-        // cria e salva no banco
-        $schedule = Schedule::create($validated);
-
-        // responde em JSON para o JS
-        return response()->json([
-            'success' => true,
-            'message' => 'Agendamento salvo com sucesso!',
-            'schedule' => $schedule
+        
+        $schedule = Auth::user()->schedules()->create($validated);
+        
+        return redirect()->route('schedules.index')
+            ->with('success', 'Agendamento criado com sucesso!');
+    }
+    
+    public function show($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        return view('schedules.show', compact('schedule'));
+    }
+    
+    public function edit($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        return view('schedules.edit', compact('schedule'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'time' => 'required',
+            'description' => 'nullable|string'
         ]);
+        
+        $schedule = Schedule::findOrFail($id);
+        $schedule->update($validated);
+        
+        return redirect()->route('schedules.index')
+            ->with('success', 'Agendamento atualizado com sucesso!');
+    }
+    
+    public function destroy($id)
+    {
+        $schedule = Schedule::findOrFail($id);
+        $schedule->delete();
+        
+        return redirect()->route('schedules.index')
+            ->with('success', 'Agendamento removido com sucesso!');
     }
 }

@@ -127,7 +127,62 @@
             <p>&copy; {{ date('Y') }} Agendamentos. Todos os direitos reservados.</p>
         </div>
     </footer>
+@extends('layouts.app')
 
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Criar Novo Agendamento
+                </div>
+                
+                <div class="card-body">
+                    <form method="POST" action="{{ route('schedules.store') }}">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Título</label>
+                            <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                                   id="title" name="title" required>
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Data</label>
+                            <input type="date" class="form-control @error('date') is-invalid @enderror" 
+                                   id="date" name="date" required>
+                            @error('date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Horário</label>
+                            <input type="time" class="form-control @error('time') is-invalid @enderror" 
+                                   id="time" name="time" required>
+                            @error('time')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
     <!-- Scripts -->
     <script>
         const SCHEDULES_URL = "{{ url('/schedules') }}";
